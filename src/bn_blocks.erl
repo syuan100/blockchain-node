@@ -6,7 +6,12 @@
 -export([handle_rpc/2]).
 
 handle_rpc(<<"block_height">>, _Params) ->
-    bn_txns:follower_height();
+    case application:get_env(blockchain, store_historic_balances, false) of
+        true ->
+            bn_balances:follower_height();
+        false ->
+            bn_txns:follower_height()
+    end;
 
 handle_rpc(<<"block_get">>, {Param}) ->
     HeightOrHash =
