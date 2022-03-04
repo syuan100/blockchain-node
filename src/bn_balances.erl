@@ -14,6 +14,7 @@
 
 % api
 -export([get_historic_entry/2]).
+-export([follower_height/0]).
 % hooks
 -export([incremental_commit_hook/2, end_commit_hook/3]).
 
@@ -150,6 +151,14 @@ end_commit_hook(_CF, Changes, Height) ->
         Changes
     ),
     rocksdb:write_batch(DB, Batch, []).
+
+%%
+%% api
+%%
+
+follower_height() ->
+    {ok, State} = get_state(),
+    follower_height(State).
 
 %%
 %% Internal
